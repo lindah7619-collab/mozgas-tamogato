@@ -1,16 +1,262 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mozgástámogató</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mozgástámogató</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f5f6;
+        color: #222;
+    }
+
+    .container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 24px 16px 50px;
+    }
+
+    h1 {
+        margin-bottom: 4px;
+    }
+
+    .subtitle {
+        color: #666;
+        margin-top: 0;
+        margin-bottom: 28px;
+    }
+
+    .week {
+        display: grid;
+        gap: 10px;
+    }
+
+    .day {
+        background: white;
+        border-radius: 12px;
+        padding: 14px;
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        align-items: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .day-name {
+        font-weight: bold;
+    }
+
+    .choices {
+        display: flex;
+        gap: 8px;
+    }
+
+    button.choice {
+        flex: 1;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        padding: 10px 4px;
+        cursor: pointer;
+        font-weight: bold;
+        background: #eee;
+    }
+
+    button.choice.selected {
+        border-color: #222;
+    }
+
+    .E { background: #dcefdc !important; }
+    .M { background: #dce8f5 !important; }
+    .P { background: #eeeeee !important; }
+
+    #checkButton {
+        width: 100%;
+        margin-top: 22px;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #message {
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 10px;
+        display: none;
+    }
+
+    .success {
+        background: #e3f3e3;
+    }
+
+    .error {
+        background: #f7dddd;
+    }
+
+    .counter {
+        margin-top: 18px;
+        text-align: center;
+        color: #555;
+    }
+</style>
 </head>
 
 <body>
-    <h1>Mozgástámogató</h1>
-    <p>A rendszer készen áll az indulásra.</p>
 
-    <h2>Heti tervező</h2>
-    <p>2 edzésnap · 3 mozgásnap · 2 pihenőnap</p>
+<div class="container">
+
+    <h1>Mozgástámogató</h1>
+    <p class="subtitle">Heti tervező · Kezdő szint</p>
+
+    <div class="week" id="week"></div>
+
+    <div class="counter" id="counter">
+        Edzés: 0/2 · Mozgás: 0/3 · Pihenő: 0/2
+    </div>
+
+    <button id="checkButton" onclick="checkWeek()">
+        Heti terv ellenőrzése
+    </button>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+
+const days = [
+    "Hétfő",
+    "Kedd",
+    "Szerda",
+    "Csütörtök",
+    "Péntek",
+    "Szombat",
+    "Vasárnap"
+];
+
+const plan = Array(7).fill(null);
+
+const week = document.getElementById("week");
+
+days.forEach((day, index) => {
+
+    const row = document.createElement("div");
+    row.className = "day";
+
+    row.innerHTML = `
+        <div class="day-name">${day}</div>
+
+        <div class="choices">
+            <button class="choice E"
+                onclick="selectDay(${index}, 'E', this)">
+                E
+            </button>
+
+            <button class="choice M"
+                onclick="selectDay(${index}, 'M', this)">
+                M
+            </button>
+
+            <button class="choice P"
+                onclick="selectDay(${index}, 'P', this)">
+                P
+            </button>
+        </div>
+    `;
+
+    week.appendChild(row);
+});
+
+
+function selectDay(index, type, button) {
+
+    plan[index] = type;
+
+    const buttons =
+        button.parentElement.querySelectorAll(".choice");
+
+    buttons.forEach(b =>
+        b.classList.remove("selected")
+    );
+
+    button.classList.add("selected");
+
+    updateCounter();
+}
+
+
+function updateCounter() {
+
+    const e = plan.filter(x => x === "E").length;
+    const m = plan.filter(x => x === "M").length;
+    const p = plan.filter(x => x === "P").length;
+
+    document.getElementById("counter").textContent =
+        `Edzés: ${e}/2 · Mozgás: ${m}/3 · Pihenő: ${p}/2`;
+}
+
+
+function checkWeek() {
+
+    const message = document.getElementById("message");
+
+    message.style.display = "block";
+    message.className = "";
+
+    if (plan.includes(null)) {
+        showError("⚠ Minden naphoz válassz státuszt.");
+        return;
+    }
+
+    const e = plan.filter(x => x === "E").length;
+    const m = plan.filter(x => x === "M").length;
+    const p = plan.filter(x => x === "P").length;
+
+    if (e !== 2 || m !== 3 || p !== 2) {
+        showError("⚠ A heti arány: 2 edzésnap · 3 mozgásnap · 2 pihenőnap.");
+        return;
+    }
+
+    for (let i = 0; i < 6; i++) {
+        if (plan[i] === "E" && plan[i + 1] === "E") {
+            showError("⚠ Két edzésnap nem kerülhet egymás mellé.");
+            return;
+        }
+    }
+
+    for (let i = 0; i < 5; i++) {
+        if (
+            plan[i] === "P" &&
+            plan[i + 1] === "P" &&
+            plan[i + 2] === "P"
+        ) {
+            showError("⚠ Három pihenőnap nem kerülhet egymás mellé.");
+            return;
+        }
+    }
+
+    message.className = "success";
+    message.textContent = "✓ Heti terv elfogadva.";
+}
+
+
+function showError(text) {
+
+    const message = document.getElementById("message");
+
+    message.className = "error";
+    message.textContent = text;
+}
+
+</script>
+
 </body>
 </html>
