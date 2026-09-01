@@ -6,106 +6,140 @@
 <title>Mozgástámogató</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f5f6;
-        color: #222;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f5f6;
+    color: #222;
+}
 
-    .container {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 24px 16px 50px;
-    }
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 24px 16px 50px;
+}
 
-    h1 {
-        margin-bottom: 4px;
-    }
+h1 {
+    margin-bottom: 4px;
+}
 
-    .subtitle {
-        color: #666;
-        margin-top: 0;
-        margin-bottom: 28px;
-    }
+.subtitle {
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 28px;
+}
 
-    .week {
-        display: grid;
-        gap: 10px;
-    }
+.week {
+    display: grid;
+    gap: 10px;
+}
 
-    .day {
-        background: white;
-        border-radius: 12px;
-        padding: 14px;
-        display: grid;
-        grid-template-columns: 100px 1fr;
-        align-items: center;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
+.day {
+    background: white;
+    border-radius: 12px;
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
 
-    .day-name {
-        font-weight: bold;
-    }
+.day-name {
+    font-weight: bold;
+}
 
-    .choices {
-        display: flex;
-        gap: 8px;
-    }
+.choices {
+    display: flex;
+    gap: 8px;
+}
 
-    button.choice {
-        flex: 1;
-        border: 2px solid transparent;
-        border-radius: 8px;
-        padding: 10px 4px;
-        cursor: pointer;
-        font-weight: bold;
-        background: #eee;
-    }
+button.choice {
+    flex: 1;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 10px 4px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #eee;
+}
 
-    button.choice.selected {
-        border-color: #222;
-    }
+button.choice.selected {
+    border-color: #222;
+}
 
-    .E { background: #dcefdc !important; }
-    .M { background: #dce8f5 !important; }
-    .P { background: #eeeeee !important; }
+.E {
+    background: #dcefdc !important;
+}
 
-    #checkButton {
-        width: 100%;
-        margin-top: 22px;
-        padding: 14px;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-    }
+.M {
+    background: #dce8f5 !important;
+}
 
-    #message {
-        margin-top: 18px;
-        padding: 14px;
-        border-radius: 10px;
-        display: none;
-    }
+.P {
+    background: #eeeeee !important;
+}
 
-    .success {
-        background: #e3f3e3;
-    }
+#checkButton {
+    width: 100%;
+    margin-top: 22px;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-    .error {
-        background: #f7dddd;
-    }
+#message {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 10px;
+    display: none;
+}
 
-    .counter {
-        margin-top: 18px;
-        text-align: center;
-        color: #555;
-    }
+.success {
+    background: #e3f3e3;
+}
+
+.error {
+    background: #f7dddd;
+}
+
+.counter {
+    margin-top: 18px;
+    text-align: center;
+    color: #555;
+}
+
+#result {
+    display: none;
+    margin-top: 28px;
+}
+
+.result-day {
+    background: white;
+    margin-bottom: 9px;
+    padding: 14px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.program-name {
+    font-weight: bold;
+}
+
+.program-detail {
+    font-size: 14px;
+    color: #666;
+    margin-top: 3px;
+}
 </style>
 </head>
 
@@ -127,6 +161,11 @@
     </button>
 
     <div id="message"></div>
+
+    <div id="result">
+        <h2>A heti programod</h2>
+        <div id="schedule"></div>
+    </div>
 
 </div>
 
@@ -190,6 +229,9 @@ function selectDay(index, type, button) {
     button.classList.add("selected");
 
     updateCounter();
+
+    document.getElementById("message").style.display = "none";
+    document.getElementById("result").style.display = "none";
 }
 
 
@@ -206,11 +248,6 @@ function updateCounter() {
 
 function checkWeek() {
 
-    const message = document.getElementById("message");
-
-    message.style.display = "block";
-    message.className = "";
-
     if (plan.includes(null)) {
         showError("⚠ Minden naphoz válassz státuszt.");
         return;
@@ -221,13 +258,17 @@ function checkWeek() {
     const p = plan.filter(x => x === "P").length;
 
     if (e !== 2 || m !== 3 || p !== 2) {
-        showError("⚠ A heti arány: 2 edzésnap · 3 mozgásnap · 2 pihenőnap.");
+        showError(
+            "⚠ A heti arány: 2 edzésnap · 3 mozgásnap · 2 pihenőnap."
+        );
         return;
     }
 
     for (let i = 0; i < 6; i++) {
         if (plan[i] === "E" && plan[i + 1] === "E") {
-            showError("⚠ Két edzésnap nem kerülhet egymás mellé.");
+            showError(
+                "⚠ Két edzésnap nem kerülhet egymás mellé."
+            );
             return;
         }
     }
@@ -238,13 +279,15 @@ function checkWeek() {
             plan[i + 1] === "P" &&
             plan[i + 2] === "P"
         ) {
-            showError("⚠ Három pihenőnap nem kerülhet egymás mellé.");
+            showError(
+                "⚠ Három pihenőnap nem kerülhet egymás mellé."
+            );
             return;
         }
     }
 
-    message.className = "success";
-    message.textContent = "✓ Heti terv elfogadva.";
+    showSuccess();
+    createSchedule();
 }
 
 
@@ -252,8 +295,120 @@ function showError(text) {
 
     const message = document.getElementById("message");
 
+    message.style.display = "block";
     message.className = "error";
     message.textContent = text;
+
+    document.getElementById("result").style.display = "none";
+}
+
+
+function showSuccess() {
+
+    const message = document.getElementById("message");
+
+    message.style.display = "block";
+    message.className = "success";
+    message.textContent = "✓ Heti terv elfogadva.";
+}
+
+
+function createSchedule() {
+
+    const schedule = document.getElementById("schedule");
+    schedule.innerHTML = "";
+
+    let strengthIndex = 0;
+    let movementIndex = 0;
+
+    const strengthPrograms = [
+        {
+            code: "A",
+            name: "Teljes test",
+            detail: "30–40 perc"
+        },
+        {
+            code: "B",
+            name: "Teljes test",
+            detail: "30–40 perc"
+        }
+    ];
+
+    const movementPrograms = [
+        {
+            code: "M1",
+            name: "Futás–séta",
+            detail: "kb. 28 perc"
+        },
+        {
+            code: "M2",
+            name: "Mobilitás + jóga",
+            detail: "kb. 30 perc"
+        },
+        {
+            code: "M3",
+            name: "Elliptikus + mobilitás",
+            detail: "kb. 30 perc"
+        }
+    ];
+
+    plan.forEach((type, index) => {
+
+        let code = "";
+        let name = "";
+        let detail = "";
+
+        if (type === "E") {
+
+            const program =
+                strengthPrograms[strengthIndex];
+
+            code = program.code;
+            name = program.name;
+            detail = program.detail;
+
+            strengthIndex++;
+        }
+
+        if (type === "M") {
+
+            const program =
+                movementPrograms[movementIndex];
+
+            code = program.code;
+            name = program.name;
+            detail = program.detail;
+
+            movementIndex++;
+        }
+
+        if (type === "P") {
+            code = "P";
+            name = "Pihenőnap";
+            detail = "Tervezett regeneráció";
+        }
+
+        const row = document.createElement("div");
+        row.className = "result-day";
+
+        row.innerHTML = `
+            <div class="day-name">${days[index]}</div>
+
+            <div>
+                <div class="program-name">
+                    ${code} · ${name}
+                </div>
+
+                <div class="program-detail">
+                    ${detail}
+                </div>
+            </div>
+        `;
+
+        schedule.appendChild(row);
+    });
+
+    document.getElementById("result").style.display = "block";
 }
 
 </script>
