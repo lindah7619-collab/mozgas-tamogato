@@ -414,7 +414,7 @@ function createSchedule() {
 }
 function openProgram(code) {
 
-    if (code !== "A" && code !== "B" && code !== "M1") {
+    if (code !== "A" && code !== "B" && code !== "M1" && code !== "M2") {
         return;
     }
 
@@ -498,7 +498,36 @@ if (code === "M1") {
         <p><strong>Az utolsó futószakasz után tilos megnézni, meddig bírod még.</strong></p>
     `;
 }
-if (code === "A" || code === "B") {
+if (code === "M2") {
+
+    title = "M2 · Mobilitás + jóga";
+    duration = "kb. 25–30 perc";
+
+    warmup = `
+        <p>☐ Könnyű helyben járás – 2 perc</p>
+        <p>☐ Boka mobilizálás, térd előre a lábfej fölé – 8/oldal</p>
+        <p>☐ Bokakörzés kapaszkodva – 6+6/oldal</p>
+        <p>☐ Lassú vállkörzés – 8 előre + 8 hátra</p>
+        <p>☐ Fali karcsúsztatás – 8</p>
+    `;
+
+    mainPart = `
+        <p>☐ Macska–tehén – 8</p>
+        <p>☐ Gyermekpóz – 30 mp</p>
+        <p>☐ Lefelé néző kutya – 20–30 mp</p>
+        <p>☐ Alacsony kitörés – 30 mp/oldal</p>
+        <p>☐ Harcos II – 30 mp/oldal</p>
+        <p>☐ Kíméletes ülő előrehajlás – 30 mp</p>
+        <p>☐ Térdhúzás mellkashoz hanyatt fekve – 30 mp/oldal</p>
+        <p>☐ Hanyatt fekvő gerinccsavarás – 30 mp/oldal</p>
+    `;
+
+    cooldown = `
+        <p>☐ Nyugodt hanyatt fekvő pihenés – 2 perc</p>
+        <p><strong>Kényelmes mozgástartomány. Nincs mélyítés, nincs plusz kör.</strong></p>
+    `;
+}
+    if (code === "A" || code === "B") {
     cooldown = `
     <p>☐ Nagyon lassú séta – 1–2 perc</p>
     <p>☐ Vádlinyújtás – 20–30 mp/oldal</p>
