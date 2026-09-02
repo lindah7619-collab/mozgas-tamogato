@@ -396,7 +396,9 @@ function createSchedule() {
 
             <div>
                 <div class="program-name">
-                    ${code} · ${name}
+                   <button onclick="openProgram('${code}')" class="program-button">
+    ${code} · ${name}
+</button>
                 </div>
 
                 <div class="program-detail">
@@ -410,7 +412,12 @@ function createSchedule() {
 
     document.getElementById("result").style.display = "block";
 }
+function openProgram(code) {
 
+    if (code === "A") {
+        alert("A program megnyitása működik.");
+    }
+}
 </script>
 
 </body>
