@@ -414,7 +414,7 @@ function createSchedule() {
 }
 function openProgram(code) {
 
-    if (code !== "A") {
+    if (code !== "A" && code !== "B") {
         return;
     }
 
@@ -423,7 +423,72 @@ function openProgram(code) {
     if (existingView) {
         existingView.remove();
     }
+let title = "";
+let duration = "";
+let warmup = "";
+let mainPart = "";
+let cooldown = "";
 
+if (code === "A") {
+
+    title = "A · Teljes test";
+    duration = "30–40 perc · felső határ: 45 perc";
+
+    warmup = `
+        <p>☐ Könnyű séta futópadon – 2 perc</p>
+        <p>☐ Bokakörzés – 5-5 kör mindkét irányba</p>
+        <p>☐ Boka mobilizálás, térd előre a lábfej fölé – 8/oldal</p>
+        <p>☐ Vállkörzés – 8 előre + 8 hátra</p>
+        <p>☐ Gumiszalag széthúzás mellmagasságban – 8–10</p>
+        <p>☐ Macska–tehén – 6–8</p>
+        <p>☐ Sekély guggolás – 6</p>
+        <p>☐ Csípőhajlítás súly nélkül – 6</p>
+    `;
+
+    mainPart = `
+        <p>☐ Székre guggolás – 2×8</p>
+        <p>☐ Gumiszalagos evezés – 2×10</p>
+        <p>☐ Fali vagy magas támaszos fekvőtámasz – 2×8</p>
+        <p>☐ Csípőemelés – 2×10</p>
+        <p>☐ Álló vádliemelés kapaszkodva – 2×10</p>
+        <p>☐ Dead bug – 2×6/oldal</p>
+    `;
+}
+
+if (code === "B") {
+
+    title = "B · Teljes test";
+    duration = "30–40 perc · felső határ: 45 perc";
+
+    warmup = `
+        <p>☐ Könnyű séta futópadon – 2 perc</p>
+        <p>☐ Bokakörzés – 5-5 kör mindkét irányba</p>
+        <p>☐ Boka mobilizálás, térd előre a lábfej fölé – 8/oldal</p>
+        <p>☐ Vállkörzés – 8 előre + 8 hátra</p>
+        <p>☐ Gumiszalag széthúzás mellmagasságban – 8–10</p>
+        <p>☐ Macska–tehén – 6–8</p>
+        <p>☐ Sekély guggolás – 6</p>
+        <p>☐ Csípőhajlítás súly nélkül – 6</p>
+    `;
+
+    mainPart = `
+        <p>☐ Hátralépéses kitörés kapaszkodva – 2×6/oldal</p>
+        <p>☐ Gumiszalagos lehúzás vagy evezés – 2×10</p>
+        <p>☐ Könnyű kézisúlyzós vállgyakorlat – 2×8</p>
+        <p>☐ Csípőhajlítás súly nélkül – 2×8</p>
+        <p>☐ Oldalazó lépések gumiszalaggal – 2×8/irány</p>
+        <p>☐ Bird dog – 2×6/oldal</p>
+    `;
+}
+
+cooldown = `
+    <p>☐ Nagyon lassú séta – 1–2 perc</p>
+    <p>☐ Vádlinyújtás – 20–30 mp/oldal</p>
+    <p>☐ Combfeszítő nyújtás – 20–30 mp/oldal</p>
+    <p>☐ Farizom/csípő nyújtás – 20–30 mp/oldal</p>
+    <p>☐ Mellkasnyújtás ajtófélfánál – 20–30 mp/oldal</p>
+    <p>☐ Váll keresztbe húzott nyújtása – 20–30 mp/oldal</p>
+`;
     const programView = document.createElement("div");
     programView.id = "programView";
 
@@ -436,40 +501,22 @@ function openProgram(code) {
             box-shadow: 0 1px 6px rgba(0,0,0,0.08);
         ">
 
-            <h2 style="margin-top: 0;">A · Teljes test</h2>
+            <h2 style="margin-top: 0;">${title}</h2>
             <p style="color:#666;">
-                30–40 perc · felső határ: 45 perc
+                ${duration}
             </p>
 
             <h3>Bemelegítés</h3>
 
-            <p>☐ Könnyű séta futópadon – 2 perc</p>
-            <p>☐ Bokakörzés – 5-5 kör mindkét irányba</p>
-            <p>☐ Boka mobilizálás, térd előre a lábfej fölé – 8/oldal</p>
-            <p>☐ Vállkörzés – 8 előre + 8 hátra</p>
-            <p>☐ Gumiszalag széthúzás mellmagasságban – 8–10</p>
-            <p>☐ Macska–tehén – 6–8</p>
-            <p>☐ Sekély guggolás – 6</p>
-            <p>☐ Csípőhajlítás súly nélkül – 6</p>
+            ${warmup}
 
             <h3>Fő rész</h3>
 
-            <p>☐ Székre guggolás – 2×8</p>
-            <p>☐ Gumiszalagos evezés – 2×10</p>
-            <p>☐ Fali vagy magas támaszos fekvőtámasz – 2×8</p>
-            <p>☐ Csípőemelés – 2×10</p>
-            <p>☐ Álló vádliemelés kapaszkodva – 2×10</p>
-            <p>☐ Dead bug – 2×6/oldal</p>
+            ${mainPart}
 
             <h3>Levezetés</h3>
 
-            <p>☐ Nagyon lassú séta – 1–2 perc</p>
-            <p>☐ Vádlinyújtás – 20–30 mp/oldal</p>
-            <p>☐ Combfeszítő nyújtás – 20–30 mp/oldal</p>
-            <p>☐ Farizom/csípő nyújtás – 20–30 mp/oldal</p>
-            <p>☐ Mellkasnyújtás ajtófélfánál – 20–30 mp/oldal</p>
-            <p>☐ Váll keresztbe húzott nyújtása – 20–30 mp/oldal</p>
-
+            ${cooldown}
             <button
                 onclick="finishWorkout()"
                 style="
