@@ -414,7 +414,7 @@ function createSchedule() {
 }
 function openProgram(code) {
 
-    if (code !== "A" && code !== "B") {
+    if (code !== "A" && code !== "B" && code !== "M1") {
         return;
     }
 
@@ -480,8 +480,26 @@ if (code === "B") {
         <p>☐ Bird dog – 2×6/oldal</p>
     `;
 }
+if (code === "M1") {
 
-cooldown = `
+    title = "M1 · Futás–séta";
+    duration = "kb. 28 perc · felső határ: ennyi";
+
+    warmup = `
+        <p>☐ Könnyű vagy tempós séta – 5 perc</p>
+    `;
+
+    mainPart = `
+        <p>☐ 1 perc nagyon könnyű futás + 2 perc séta × 6</p>
+    `;
+
+    cooldown = `
+        <p>☐ Könnyű séta – 5 perc</p>
+        <p><strong>Az utolsó futószakasz után tilos megnézni, meddig bírod még.</strong></p>
+    `;
+}
+if (code === "A" || code === "B") {
+    cooldown = `
     <p>☐ Nagyon lassú séta – 1–2 perc</p>
     <p>☐ Vádlinyújtás – 20–30 mp/oldal</p>
     <p>☐ Combfeszítő nyújtás – 20–30 mp/oldal</p>
@@ -489,6 +507,7 @@ cooldown = `
     <p>☐ Mellkasnyújtás ajtófélfánál – 20–30 mp/oldal</p>
     <p>☐ Váll keresztbe húzott nyújtása – 20–30 mp/oldal</p>
 `;
+    }
     const programView = document.createElement("div");
     programView.id = "programView";
 
