@@ -414,43 +414,104 @@ function createSchedule() {
 }
 function openProgram(code) {
 
-    if (code === "A") {
-
-        const content = `
-A · TELJES TEST
-
-Bemelegítés
-1. Könnyű séta futópadon – 2 perc
-2. Bokakörzés – 5-5 kör mindkét irányba
-3. Boka mobilizálás, térd előre a lábfej fölé – 8/oldal
-4. Vállkörzés – 8 előre + 8 hátra
-5. Gumiszalag széthúzás mellmagasságban – 8–10
-6. Macska–tehén – 6–8
-7. Sekély guggolás – 6
-8. Csípőhajlítás súly nélkül – 6
-
-Fő rész
-1. Székre guggolás – 2×8
-2. Gumiszalagos evezés – 2×10
-3. Fali vagy magas támaszos fekvőtámasz – 2×8
-4. Csípőemelés – 2×10
-5. Álló vádliemelés kapaszkodva – 2×10
-6. Dead bug – 2×6/oldal
-
-Levezetés
-1. Nagyon lassú séta – 1–2 perc
-2. Vádlinyújtás – 20–30 mp/oldal
-3. Combfeszítő nyújtás – 20–30 mp/oldal
-4. Farizom/csípő nyújtás – 20–30 mp/oldal
-5. Mellkasnyújtás ajtófélfánál – 20–30 mp/oldal
-6. Váll keresztbe húzott nyújtása – 20–30 mp/oldal
-
-Felső határ: 45 perc.
-Nincs ráadás.
-        `;
-
-        alert(content);
+    if (code !== "A") {
+        return;
     }
+
+    const existingView = document.getElementById("programView");
+
+    if (existingView) {
+        existingView.remove();
+    }
+
+    const programView = document.createElement("div");
+    programView.id = "programView";
+
+    programView.innerHTML = `
+        <div style="
+            margin-top: 28px;
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+        ">
+
+            <h2 style="margin-top: 0;">A · Teljes test</h2>
+            <p style="color:#666;">
+                30–40 perc · felső határ: 45 perc
+            </p>
+
+            <h3>Bemelegítés</h3>
+
+            <p>☐ Könnyű séta futópadon – 2 perc</p>
+            <p>☐ Bokakörzés – 5-5 kör mindkét irányba</p>
+            <p>☐ Boka mobilizálás, térd előre a lábfej fölé – 8/oldal</p>
+            <p>☐ Vállkörzés – 8 előre + 8 hátra</p>
+            <p>☐ Gumiszalag széthúzás mellmagasságban – 8–10</p>
+            <p>☐ Macska–tehén – 6–8</p>
+            <p>☐ Sekély guggolás – 6</p>
+            <p>☐ Csípőhajlítás súly nélkül – 6</p>
+
+            <h3>Fő rész</h3>
+
+            <p>☐ Székre guggolás – 2×8</p>
+            <p>☐ Gumiszalagos evezés – 2×10</p>
+            <p>☐ Fali vagy magas támaszos fekvőtámasz – 2×8</p>
+            <p>☐ Csípőemelés – 2×10</p>
+            <p>☐ Álló vádliemelés kapaszkodva – 2×10</p>
+            <p>☐ Dead bug – 2×6/oldal</p>
+
+            <h3>Levezetés</h3>
+
+            <p>☐ Nagyon lassú séta – 1–2 perc</p>
+            <p>☐ Vádlinyújtás – 20–30 mp/oldal</p>
+            <p>☐ Combfeszítő nyújtás – 20–30 mp/oldal</p>
+            <p>☐ Farizom/csípő nyújtás – 20–30 mp/oldal</p>
+            <p>☐ Mellkasnyújtás ajtófélfánál – 20–30 mp/oldal</p>
+            <p>☐ Váll keresztbe húzott nyújtása – 20–30 mp/oldal</p>
+
+            <button
+                onclick="finishWorkout()"
+                style="
+                    width:100%;
+                    margin-top:20px;
+                    padding:14px;
+                    border:none;
+                    border-radius:10px;
+                    font-size:16px;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">
+                Edzés befejezése
+            </button>
+
+            <div
+                id="finishMessage"
+                style="
+                    display:none;
+                    margin-top:16px;
+                    padding:14px;
+                    border-radius:10px;
+                    background:#e3f3e3;
+                    font-weight:bold;
+                ">
+                ✓ Mai program teljesítve. Ráadás nem szükséges.
+            </div>
+
+        </div>
+    `;
+
+    document.querySelector(".container").appendChild(programView);
+
+    programView.scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+
+function finishWorkout() {
+
+    document.getElementById("finishMessage").style.display = "block";
 }
 </script>
 
