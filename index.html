@@ -628,6 +628,18 @@ if (code === "M2") {
 
 function finishWorkout() {
 
+    const programTitle = document.querySelector("#programView h2").textContent;
+
+    const completed = {
+        program: programTitle,
+        completedAt: new Date().toISOString()
+    };
+
+    localStorage.setItem(
+        "lastCompletedWorkout",
+        JSON.stringify(completed)
+    );
+
     document.getElementById("finishMessage").style.display = "block";
 }
 </script>
