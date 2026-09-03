@@ -652,8 +652,8 @@ if (programTitle.startsWith("B")) {
     localStorage.setItem("nextStrength", nextStrength);
 }
     document.getElementById("finishMessage").style.display = "block";
-}
-if (programTitle.startsWith("M1")) {
+
+    if (programTitle.startsWith("M1")) {
     nextMovement = "M2";
     localStorage.setItem("nextMovement", nextMovement);
 }
@@ -666,6 +666,7 @@ if (programTitle.startsWith("M2")) {
 if (programTitle.startsWith("M3")) {
     nextMovement = "M1";
     localStorage.setItem("nextMovement", nextMovement);
+}
 }
 </script>
 
