@@ -183,7 +183,8 @@ const days = [
 
 const plan = Array(7).fill(null);
 let nextStrength = localStorage.getItem("nextStrength") || "A";
-const week = document.getElementById("week");
+let nextMovement = localStorage.getItem("nextMovement") || "M1";
+    const week = document.getElementById("week");
 
 days.forEach((day, index) => {
 
@@ -319,7 +320,9 @@ function createSchedule() {
     schedule.innerHTML = "";
 
     let strengthIndex = nextStrength === "A" ? 0 : 1;
-    let movementIndex = 0;
+    let movementIndex =
+    nextMovement === "M1" ? 0 :
+    nextMovement === "M2" ? 1 : 2;
 
     const strengthPrograms = [
         {
@@ -379,7 +382,7 @@ function createSchedule() {
             name = program.name;
             detail = program.detail;
 
-            movementIndex++;
+            movementIndex = (movementIndex + 1) % 3;
         }
 
         if (type === "P") {
@@ -649,6 +652,20 @@ if (programTitle.startsWith("B")) {
     localStorage.setItem("nextStrength", nextStrength);
 }
     document.getElementById("finishMessage").style.display = "block";
+}
+if (programTitle.startsWith("M1")) {
+    nextMovement = "M2";
+    localStorage.setItem("nextMovement", nextMovement);
+}
+
+if (programTitle.startsWith("M2")) {
+    nextMovement = "M3";
+    localStorage.setItem("nextMovement", nextMovement);
+}
+
+if (programTitle.startsWith("M3")) {
+    nextMovement = "M1";
+    localStorage.setItem("nextMovement", nextMovement);
 }
 </script>
 
