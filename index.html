@@ -182,7 +182,7 @@ const days = [
 ];
 
 const plan = Array(7).fill(null);
-
+let nextStrength = localStorage.getItem("nextStrength") || "A";
 const week = document.getElementById("week");
 
 days.forEach((day, index) => {
@@ -318,7 +318,7 @@ function createSchedule() {
     const schedule = document.getElementById("schedule");
     schedule.innerHTML = "";
 
-    let strengthIndex = 0;
+    let strengthIndex = nextStrength === "A" ? 0 : 1;
     let movementIndex = 0;
 
     const strengthPrograms = [
@@ -367,7 +367,7 @@ function createSchedule() {
             name = program.name;
             detail = program.detail;
 
-            strengthIndex++;
+            strengthIndex = strengthIndex === 0 ? 1 : 0;
         }
 
         if (type === "M") {
@@ -639,7 +639,15 @@ function finishWorkout() {
         "lastCompletedWorkout",
         JSON.stringify(completed)
     );
+if (programTitle.startsWith("A")) {
+    nextStrength = "B";
+    localStorage.setItem("nextStrength", nextStrength);
+}
 
+if (programTitle.startsWith("B")) {
+    nextStrength = "A";
+    localStorage.setItem("nextStrength", nextStrength);
+}
     document.getElementById("finishMessage").style.display = "block";
 }
 </script>
