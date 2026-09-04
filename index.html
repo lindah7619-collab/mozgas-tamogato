@@ -188,6 +188,13 @@ const plan = savedPlan
     : Array(7).fill(null);
 let nextStrength = localStorage.getItem("nextStrength") || "A";
 let nextMovement = localStorage.getItem("nextMovement") || "M1";
+    let currentDayIndex = null;
+
+const savedDayStates = localStorage.getItem("weeklyDayStates");
+
+let weeklyDayStates = savedDayStates
+    ? JSON.parse(savedDayStates)
+    : Array(7).fill(null);
     const week = document.getElementById("week");
 
 days.forEach((day, index) => {
@@ -332,10 +339,8 @@ function createSchedule() {
     const schedule = document.getElementById("schedule");
     schedule.innerHTML = "";
 
-    let strengthIndex = nextStrength === "A" ? 0 : 1;
-    let movementIndex =
-    nextMovement === "M1" ? 0 :
-    nextMovement === "M2" ? 1 : 2;
+let currentStrength = nextStrength;
+let currentMovement = nextMovement;
 
     const strengthPrograms = [
         {
@@ -374,30 +379,76 @@ function createSchedule() {
         let name = "";
         let detail = "";
 
-        if (type === "E") {
+       if (type === "E") {
 
-            const program =
-                strengthPrograms[strengthIndex];
+    const savedState = weeklyDayStates[index];
 
-            code = program.code;
-            name = program.name;
-            detail = program.detail;
+    if (savedState && savedState.closed) {
 
-            strengthIndex = strengthIndex === 0 ? 1 : 0;
+        const program =
+            strengthPrograms.find(p => p.code === savedState.program);
+
+        code = program.code;
+        name = program.name;
+        detail = program.detail;
+
+        if (savedState.completed) {
+            currentStrength =
+                savedState.program === "A" ? "B" : "A";
+        } else {
+            currentStrength = savedState.program;
         }
 
+    } else {
+
+        const program =
+            strengthPrograms.find(p => p.code === currentStrength);
+
+        code = program.code;
+        name = program.name;
+        detail = program.detail;
+
+        currentStrength =
+            currentStrength === "A" ? "B" : "A";
+    }
+}
         if (type === "M") {
 
-            const program =
-                movementPrograms[movementIndex];
+    const savedState = weeklyDayStates[index];
 
-            code = program.code;
-            name = program.name;
-            detail = program.detail;
+    if (savedState && savedState.closed) {
 
-            movementIndex = (movementIndex + 1) % 3;
+        const program =
+            movementPrograms.find(p => p.code === savedState.program);
+
+        code = program.code;
+        name = program.name;
+        detail = program.detail;
+
+        if (savedState.completed) {
+
+            currentMovement =
+                savedState.program === "M1" ? "M2" :
+                savedState.program === "M2" ? "M3" : "M1";
+
+        } else {
+            currentMovement = savedState.program;
         }
 
+    } else {
+
+        const program =
+            movementPrograms.find(p => p.code === currentMovement);
+
+        code = program.code;
+        name = program.name;
+        detail = program.detail;
+
+        currentMovement =
+            currentMovement === "M1" ? "M2" :
+            currentMovement === "M2" ? "M3" : "M1";
+    }
+}
         if (type === "P") {
             code = "P";
             name = "Pihenőnap";
@@ -412,7 +463,7 @@ function createSchedule() {
 
             <div>
                 <div class="program-name">
-                   <button onclick="openProgram('${code}')" class="program-button">
+                   <button onclick="openProgram('${code}', ${index})" class="program-button">
     ${code} · ${name}
 </button>
                 </div>
@@ -428,8 +479,8 @@ function createSchedule() {
 
     document.getElementById("result").style.display = "block";
 }
-function openProgram(code) {
-
+function openProgram(code, dayIndex) {
+currentDayIndex = dayIndex;
     if (code !== "A" && code !== "B" && code !== "M1" && code !== "M2" && code !== "M3") {
         return;
     }
@@ -659,7 +710,18 @@ if (code === "M2") {
 function finishWorkout() {
 
     const programTitle = document.querySelector("#programView h2").textContent;
+const programCode = programTitle.split(" · ")[0];
 
+weeklyDayStates[currentDayIndex] = {
+    program: programCode,
+    completed: true,
+    closed: true
+};
+
+localStorage.setItem(
+    "weeklyDayStates",
+    JSON.stringify(weeklyDayStates)
+);
     const completed = {
         program: programTitle,
         completedAt: new Date().toISOString()
@@ -699,7 +761,18 @@ if (programTitle.startsWith("M3")) {
 
     const programTitle =
         document.querySelector("#programView h2").textContent;
+const programCode = programTitle.split(" · ")[0];
 
+weeklyDayStates[currentDayIndex] = {
+    program: programCode,
+    completed: false,
+    closed: true
+};
+
+localStorage.setItem(
+    "weeklyDayStates",
+    JSON.stringify(weeklyDayStates)
+);
     const closed = {
         program: programTitle,
         closedAt: new Date().toISOString(),
