@@ -558,10 +558,75 @@ const row = document.createElement("div");
 
         schedule.appendChild(row);
     });
+const todayProgram = getTodayProgram();
 
+if (todayProgram) {
+    console.log("Mai program:", todayProgram);
+}
     document.getElementById("result").style.display = "block";
 }
-function openProgram(code, dayIndex) {
+function getTodayProgram() {
+
+    const todayType = plan[todayIndex];
+
+    if (!todayType) {
+        return null;
+    }
+
+    if (todayType === "P") {
+        return {
+            code: "P",
+            name: "Pihenőnap",
+            detail: "Tervezett regeneráció"
+        };
+    }
+
+    const savedState = weeklyDayStates[todayIndex];
+
+    if (savedState && savedState.closed) {
+        return {
+            code: savedState.program,
+            name: "Lezárt nap",
+            detail: savedState.completed
+                ? "✓ Teljesítve"
+                : "— Lezárva"
+        };
+    }
+
+    if (todayType === "E") {
+        return {
+            code: nextStrength,
+            name: "Teljes test",
+            detail: "30–40 perc"
+        };
+    }
+
+    if (todayType === "M") {
+        const movementMap = {
+            M1: {
+                name: "Futás–séta",
+                detail: "kb. 28 perc"
+            },
+            M2: {
+                name: "Mobilitás + jóga",
+                detail: "kb. 30 perc"
+            },
+            M3: {
+                name: "Elliptikus + mobilitás",
+                detail: "kb. 30 perc"
+            }
+        };
+
+        return {
+            code: nextMovement,
+            name: movementMap[nextMovement].name,
+            detail: movementMap[nextMovement].detail
+        };
+    }
+
+    return null;
+}
+    function openProgram(code, dayIndex) {
 currentDayIndex = dayIndex;
     if (code !== "A" && code !== "B" && code !== "M1" && code !== "M2" && code !== "M3") {
         return;
