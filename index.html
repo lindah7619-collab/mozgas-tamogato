@@ -324,13 +324,26 @@ function showSuccess() {
 
     const message = document.getElementById("message");
 
+    const previousPlan = localStorage.getItem("weeklyPlan");
+    const currentPlan = JSON.stringify(plan);
+
+    if (previousPlan && previousPlan !== currentPlan) {
+        weeklyDayStates = Array(7).fill(null);
+
+        localStorage.setItem(
+            "weeklyDayStates",
+            JSON.stringify(weeklyDayStates)
+        );
+    }
+
     message.style.display = "block";
     message.className = "success";
     message.textContent = "✓ Heti terv elfogadva.";
-localStorage.setItem(
-    "weeklyPlan",
-    JSON.stringify(plan)
-);
+
+    localStorage.setItem(
+        "weeklyPlan",
+        currentPlan
+    );
 }
 
 
