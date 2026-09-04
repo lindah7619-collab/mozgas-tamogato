@@ -198,15 +198,6 @@ let weeklyDayStates = savedDayStates
     const week = document.getElementById("week");
 
 days.forEach((day, index) => {
-const savedState = weeklyDayStates[index];
-
-let statusMark = "";
-
-if (savedState && savedState.closed) {
-    statusMark = savedState.completed
-        ? "✓ Teljesítve"
-        : "— Lezárva";
-}
     const row = document.createElement("div");
     row.className = "day";
 
@@ -314,8 +305,6 @@ function checkWeek() {
     showSuccess();
     createSchedule();
 }
-
-
 function showError(text) {
 
     const message = document.getElementById("message");
@@ -471,12 +460,22 @@ let currentMovement = nextMovement;
     }
 }
         if (type === "P") {
-            code = "P";
-            name = "Pihenőnap";
-            detail = "Tervezett regeneráció";
-        }
+    code = "P";
+    name = "Pihenőnap";
+    detail = "Tervezett regeneráció";
+}
 
-        const row = document.createElement("div");
+const savedState = weeklyDayStates[index];
+
+let statusMark = "";
+
+if (savedState && savedState.closed) {
+    statusMark = savedState.completed
+        ? "✓ Teljesítve"
+        : "— Lezárva";
+}
+
+const row = document.createElement("div");
         row.className = "result-day";
 
         row.innerHTML = `
