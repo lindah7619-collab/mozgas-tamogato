@@ -604,7 +604,21 @@ if (code === "M2") {
                 ">
                 Edzés befejezése
             </button>
-
+<button
+    onclick="closeWithoutCompletion()"
+    style="
+        width:100%;
+        margin-top:10px;
+        padding:14px;
+        border:none;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+        background:#eeeeee;
+    ">
+    Nap lezárása teljesítés nélkül
+</button>
             <div
                 id="finishMessage"
                 style="
@@ -666,6 +680,26 @@ if (programTitle.startsWith("M2")) {
 if (programTitle.startsWith("M3")) {
     nextMovement = "M1";
     localStorage.setItem("nextMovement", nextMovement);
+}
+    function closeWithoutCompletion() {
+
+    const programTitle =
+        document.querySelector("#programView h2").textContent;
+
+    const closed = {
+        program: programTitle,
+        closedAt: new Date().toISOString(),
+        completed: false
+    };
+
+    localStorage.setItem(
+        "lastClosedWorkout",
+        JSON.stringify(closed)
+    );
+
+    document.getElementById("finishMessage").style.display = "block";
+    document.getElementById("finishMessage").textContent =
+        "— A nap lezárva. Nincs pótlási tartozás.";
 }
 }
 </script>
