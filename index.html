@@ -733,7 +733,14 @@ if (code === "M2") {
 function finishWorkout() {
 
     const programTitle = document.querySelector("#programView h2").textContent;
-const programCode = programTitle.split(" · ")[0];
+if (
+    currentDayIndex !== null &&
+    weeklyDayStates[currentDayIndex] &&
+    weeklyDayStates[currentDayIndex].closed
+) {
+    return;
+}
+    const programCode = programTitle.split(" · ")[0];
 
 weeklyDayStates[currentDayIndex] = {
     program: programCode,
@@ -784,7 +791,14 @@ if (programTitle.startsWith("M3")) {
 
     const programTitle =
         document.querySelector("#programView h2").textContent;
-const programCode = programTitle.split(" · ")[0];
+if (
+    currentDayIndex !== null &&
+    weeklyDayStates[currentDayIndex] &&
+    weeklyDayStates[currentDayIndex].closed
+) {
+    return;
+}
+        const programCode = programTitle.split(" · ")[0];
 
 weeklyDayStates[currentDayIndex] = {
     program: programCode,
