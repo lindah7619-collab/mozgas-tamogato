@@ -181,7 +181,11 @@ const days = [
     "Vasárnap"
 ];
 
-const plan = Array(7).fill(null);
+const savedPlan = localStorage.getItem("weeklyPlan");
+
+const plan = savedPlan
+    ? JSON.parse(savedPlan)
+    : Array(7).fill(null);
 let nextStrength = localStorage.getItem("nextStrength") || "A";
 let nextMovement = localStorage.getItem("nextMovement") || "M1";
     const week = document.getElementById("week");
@@ -211,10 +215,15 @@ days.forEach((day, index) => {
             </button>
         </div>
     `;
-
+if (plan[index]) {
+    const savedButton = row.querySelector(`.${plan[index]}`);
+    if (savedButton) {
+        savedButton.classList.add("selected");
+    }
+}
     week.appendChild(row);
 });
-
+updateCounter();
 
 function selectDay(index, type, button) {
 
@@ -311,6 +320,10 @@ function showSuccess() {
     message.style.display = "block";
     message.className = "success";
     message.textContent = "✓ Heti terv elfogadva.";
+localStorage.setItem(
+    "weeklyPlan",
+    JSON.stringify(plan)
+);
 }
 
 
