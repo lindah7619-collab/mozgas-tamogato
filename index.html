@@ -180,22 +180,81 @@ const days = [
     "Szombat",
     "Vasárnap"
 ];
+const today = new Date();
 
+const todayIndex = (today.getDay() + 6) % 7;
+
+function getWeekId(date) {
+
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+
+    const day = (d.getDay() + 6) % 7;
+
+    d.setDate(d.getDate() - day);
+
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const dayOfMonth = String(d.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${dayOfMonth}`;
+}
+
+const currentWeekId = getWeekId(today);
+
+const savedWeekId = localStorage.getItem("currentWeekId");
 const savedPlan = localStorage.getItem("weeklyPlan");
-
-const plan = savedPlan
-    ? JSON.parse(savedPlan)
-    : Array(7).fill(null);
-let nextStrength = localStorage.getItem("nextStrength") || "A";
-let nextMovement = localStorage.getItem("nextMovement") || "M1";
-    let currentDayIndex = null;
-
 const savedDayStates = localStorage.getItem("weeklyDayStates");
 
 let weeklyDayStates = savedDayStates
     ? JSON.parse(savedDayStates)
     : Array(7).fill(null);
-    const week = document.getElementById("week");
+
+let plan;
+
+if (savedWeekId && savedWeekId !== currentWeekId) {
+
+    plan = Array(7).fill(null);
+    weeklyDayStates = Array(7).fill(null);
+
+    localStorage.setItem(
+        "weeklyPlan",
+        JSON.stringify(plan)
+    );
+
+    localStorage.setItem(
+        "weeklyDayStates",
+        JSON.stringify(weeklyDayStates)
+    );
+
+    localStorage.setItem(
+        "currentWeekId",
+        currentWeekId
+    );
+
+} else {
+
+    plan = savedPlan
+        ? JSON.parse(savedPlan)
+        : Array(7).fill(null);
+
+    if (!savedWeekId) {
+        localStorage.setItem(
+            "currentWeekId",
+            currentWeekId
+        );
+    }
+}
+
+let nextStrength =
+    localStorage.getItem("nextStrength") || "A";
+
+let nextMovement =
+    localStorage.getItem("nextMovement") || "M1";
+
+let currentDayIndex = null;
+
+const week = document.getElementById("week");
 
 days.forEach((day, index) => {
     const row = document.createElement("div");
