@@ -198,7 +198,15 @@ let weeklyDayStates = savedDayStates
     const week = document.getElementById("week");
 
 days.forEach((day, index) => {
+const savedState = weeklyDayStates[index];
 
+let statusMark = "";
+
+if (savedState && savedState.closed) {
+    statusMark = savedState.completed
+        ? "✓ Teljesítve"
+        : "— Lezárva";
+}
     const row = document.createElement("div");
     row.className = "day";
 
@@ -484,7 +492,10 @@ let currentMovement = nextMovement;
                 <div class="program-detail">
                     ${detail}
                 </div>
-            </div>
+           <div class="program-detail" style="font-weight:bold; margin-top:4px;">
+    ${statusMark}
+</div>
+</div>
         `;
 
         schedule.appendChild(row);
