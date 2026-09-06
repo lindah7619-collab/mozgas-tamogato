@@ -178,7 +178,41 @@ button.choice.selected {
     </div>
 
 </div>
+<div id="nextWeekPlanner" style="
+    display:none;
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:24px;
+    box-shadow:0 1px 6px rgba(0,0,0,0.08);
+">
+    <h2 style="margin-top:0;">Következő hét tervezése</h2>
 
+    <div id="nextWeek"></div>
+
+    <button 
+        id="saveNextWeekButton"
+        onclick="saveNextWeekPlan()"
+        style="
+        width:100%;
+        margin-top:18px;
+        padding:14px;
+        border:none;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+        Következő heti terv mentése
+    </button>
+
+    <div id="nextWeekMessage" style="
+        display:none;
+        margin-top:14px;
+        padding:12px;
+        border-radius:10px;
+    "></div>
+</div>
 <script>
 
 const days = [
@@ -214,6 +248,11 @@ const currentWeekId = getWeekId(today);
 
 const savedWeekId = localStorage.getItem("currentWeekId");
 const savedPlan = localStorage.getItem("weeklyPlan");
+const savedNextWeekPlan = localStorage.getItem("nextWeekPlan");
+
+let nextWeekPlan = savedNextWeekPlan
+    ? JSON.parse(savedNextWeekPlan)
+    : Array(7).fill(null);
 const savedDayStates = localStorage.getItem("weeklyDayStates");
 
 let weeklyDayStates = savedDayStates
@@ -318,7 +357,19 @@ function selectDay(index, type, button) {
     document.getElementById("message").style.display = "none";
     document.getElementById("result").style.display = "none";
 }
+function selectNextWeekDay(index, type, button) {
 
+    nextWeekPlan[index] = type;
+
+    const buttons =
+        button.parentElement.querySelectorAll(".choice");
+
+    buttons.forEach(b =>
+        b.classList.remove("selected")
+    );
+
+    button.classList.add("selected");
+}
 
 function updateCounter() {
 
@@ -375,7 +426,8 @@ function checkWeek() {
 createSchedule();
 renderTodayView();
 }
-function showError(text) {
+
+    function showError(text) {
 
     const message = document.getElementById("message");
 
@@ -412,7 +464,65 @@ function showSuccess() {
         currentPlan
     );
 }
+function saveNextWeekPlan() {
 
+    const message = document.getElementById("nextWeekMessage");
+
+    if (nextWeekPlan.includes(null)) {
+        message.style.display = "block";
+        message.className = "error";
+        message.textContent = "⚠ Minden naphoz válassz státuszt.";
+        return;
+    }
+
+    const e = nextWeekPlan.filter(x => x === "E").length;
+    const m = nextWeekPlan.filter(x => x === "M").length;
+    const p = nextWeekPlan.filter(x => x === "P").length;
+
+    if (e !== 2 || m !== 3 || p !== 2) {
+        message.style.display = "block";
+        message.className = "error";
+        message.textContent =
+            "⚠ A heti arány: 2 edzésnap · 3 mozgásnap · 2 pihenőnap.";
+        return;
+    }
+
+    for (let i = 0; i < 6; i++) {
+        if (
+            nextWeekPlan[i] === "E" &&
+            nextWeekPlan[i + 1] === "E"
+        ) {
+            message.style.display = "block";
+            message.className = "error";
+            message.textContent =
+                "⚠ Két edzésnap nem kerülhet egymás mellé.";
+            return;
+        }
+    }
+
+    for (let i = 0; i < 5; i++) {
+        if (
+            nextWeekPlan[i] === "P" &&
+            nextWeekPlan[i + 1] === "P" &&
+            nextWeekPlan[i + 2] === "P"
+        ) {
+            message.style.display = "block";
+            message.className = "error";
+            message.textContent =
+                "⚠ Három pihenőnap nem kerülhet egymás mellé.";
+            return;
+        }
+    }
+
+    localStorage.setItem(
+        "nextWeekPlan",
+        JSON.stringify(nextWeekPlan)
+    );
+
+    message.style.display = "block";
+    message.className = "success";
+    message.textContent = "✓ Következő heti terv elmentve.";
+}
 
 function createSchedule() {
 
@@ -664,6 +774,57 @@ function getTodayProgram() {
 
     todayDetail.textContent = todayProgram.detail;
 }
+  function renderNextWeekPlanner() {
+
+    const planner = document.getElementById("nextWeekPlanner");
+    const nextWeekContainer = document.getElementById("nextWeek");
+
+    if (todayIndex !== 6) {
+        planner.style.display = "none";
+        return;
+    }
+
+    planner.style.display = "block";
+    nextWeekContainer.innerHTML = "";
+
+    days.forEach((day, index) => {
+
+        const row = document.createElement("div");
+        row.className = "day";
+
+        row.innerHTML = `
+            <div class="day-name">${day}</div>
+
+            <div class="choices">
+                <button class="choice E"
+                    onclick="selectNextWeekDay(${index}, 'E', this)">
+                    E
+                </button>
+
+                <button class="choice M"
+                    onclick="selectNextWeekDay(${index}, 'M', this)">
+                    M
+                </button>
+
+                <button class="choice P"
+                    onclick="selectNextWeekDay(${index}, 'P', this)">
+                    P
+                </button>
+            </div>
+        `;
+
+        if (nextWeekPlan[index]) {
+            const savedButton =
+                row.querySelector(`.${nextWeekPlan[index]}`);
+
+            if (savedButton) {
+                savedButton.classList.add("selected");
+            }
+        }
+
+        nextWeekContainer.appendChild(row);
+    });
+}  
     function openProgram(code, dayIndex) {
 currentDayIndex = dayIndex;
     if (code !== "A" && code !== "B" && code !== "M1" && code !== "M2" && code !== "M3") {
