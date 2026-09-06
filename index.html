@@ -263,23 +263,49 @@ let plan;
 
 if (savedWeekId && savedWeekId !== currentWeekId) {
 
-    plan = Array(7).fill(null);
-    weeklyDayStates = Array(7).fill(null);
+    const previousWeekSnapshot = {
+    weekId: savedWeekId,
+    plan: savedPlan
+        ? JSON.parse(savedPlan)
+        : Array(7).fill(null),
+    dayStates: weeklyDayStates
+};
 
-    localStorage.setItem(
-        "weeklyPlan",
-        JSON.stringify(plan)
-    );
+localStorage.setItem(
+    "lastWeekSnapshot",
+    JSON.stringify(previousWeekSnapshot)
+);
 
-    localStorage.setItem(
-        "weeklyDayStates",
-        JSON.stringify(weeklyDayStates)
-    );
+const hasNextWeekPlan =
+    nextWeekPlan.some(day => day !== null);
 
-    localStorage.setItem(
-        "currentWeekId",
-        currentWeekId
-    );
+plan = hasNextWeekPlan
+    ? [...nextWeekPlan]
+    : Array(7).fill(null);
+
+weeklyDayStates = Array(7).fill(null);
+
+localStorage.setItem(
+    "weeklyPlan",
+    JSON.stringify(plan)
+);
+
+localStorage.setItem(
+    "weeklyDayStates",
+    JSON.stringify(weeklyDayStates)
+);
+
+localStorage.setItem(
+    "currentWeekId",
+    currentWeekId
+);
+
+nextWeekPlan = Array(7).fill(null);
+
+localStorage.setItem(
+    "nextWeekPlan",
+    JSON.stringify(nextWeekPlan)
+);
 
 } else {
 
