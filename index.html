@@ -150,7 +150,7 @@ button.choice.selected {
     <h1>Mozgástámogató</h1>
     <p class="subtitle">Heti tervező · Kezdő szint</p>
 
-    <div class="week" id="week"></div>
+    <div class="week" id="week" style="display:none;"></div>
 
     <div class="counter" id="counter">
         Edzés: 0/2 · Mozgás: 0/3 · Pihenő: 0/2
@@ -172,6 +172,21 @@ button.choice.selected {
     <div id="todayProgram" style="font-size:20px; font-weight:bold;"></div>
     <div id="todayDetail" style="color:#666; margin-top:4px;"></div>
 </div>
+ <button
+    id="toggleWeekButton"
+    onclick="toggleWeekView()"
+    style="
+        width:100%;
+        margin-bottom:20px;
+        padding:14px;
+        border:none;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+    Heti terv
+</button>  
     <div id="result">
         <h2>A heti programod</h2>
         <div id="schedule"></div>
@@ -801,7 +816,25 @@ function getTodayProgram() {
 
     todayDetail.textContent = todayProgram.detail;
 }
-  function renderNextWeekPlanner() {
+ function toggleWeekView() {
+
+    const week = document.getElementById("week");
+    const result = document.getElementById("result");
+    const button = document.getElementById("toggleWeekButton");
+
+    const isHidden = week.style.display === "none";
+
+    if (isHidden) {
+        week.style.display = "";
+        result.style.display = "block";
+        button.textContent = "Heti terv elrejtése";
+    } else {
+        week.style.display = "none";
+        result.style.display = "none";
+        button.textContent = "Heti terv";
+    }
+} 
+    function renderNextWeekPlanner() {
 
     const planner = document.getElementById("nextWeekPlanner");
     const nextWeekContainer = document.getElementById("nextWeek");
