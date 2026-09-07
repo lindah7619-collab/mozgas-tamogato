@@ -180,17 +180,19 @@ button.choice.selected {
 
 <div id="weekPanel" style="display:none;">
 
-    <div class="week" id="week"></div>
+    <div style="display:none;">
+        <div class="week" id="week"></div>
 
-    <div class="counter" id="counter">
-        Edzés: 0/2 · Mozgás: 0/3 · Pihenő: 0/2
+        <div class="counter" id="counter">
+            Edzés: 0/2 · Mozgás: 0/3 · Pihenő: 0/2
+        </div>
+
+        <button id="checkButton" onclick="checkWeek()">
+            Heti terv ellenőrzése
+        </button>
+
+        <div id="message"></div>
     </div>
-
-    <button id="checkButton" onclick="checkWeek()">
-        Heti terv ellenőrzése
-    </button>
-
-    <div id="message"></div>
 
     <div id="result">
         <h2>A heti programod</h2>
@@ -386,6 +388,9 @@ if (plan[index]) {
     week.appendChild(row);
 });
 updateCounter();
+if (!plan.includes(null)) {
+    createSchedule();
+}
 renderTodayView();
 renderNextWeekPlanner();
 function selectDay(index, type, button) {
