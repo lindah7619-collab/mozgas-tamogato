@@ -147,20 +147,48 @@ button.choice.selected {
 
 <div class="container">
 
-    <h1>Mozgástámogató</h1>
-    <p class="subtitle">Heti tervező · Kezdő szint</p>
+    <h1>MOZGÁS</h1>
+    <p class="subtitle">Napi mozgásterv</p>
 
     <div id="todayView" style="
-    background:white;
-    border-radius:14px;
-    padding:20px;
+    padding:24px 4px;
     margin-bottom:16px;
-    box-shadow:0 1px 6px rgba(0,0,0,0.08);
+    border-top:1px solid #999;
+    border-bottom:1px solid #999;
 ">
-    <div id="todayDate" style="font-weight:bold; margin-bottom:6px;"></div>
-    <div id="todayProgram" style="font-size:20px; font-weight:bold;"></div>
-    <div id="todayDetail" style="color:#666; margin-top:4px;"></div>
-</div>
+    <div id="todayDate" style="
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:10px;
+    letter-spacing:0.02em;
+"></div>
+    <div id="todayProgram" style="
+    font-size:28px;
+    font-weight:800;
+    line-height:1.15;
+"></div>
+   <div id="todayDetail" style="
+    font-size:16px;
+    margin-top:10px;
+    line-height:1.4;
+"></div>
+<button
+    id="openTodayProgramButton"
+    style="
+        display:none;
+        width:100%;
+        margin-top:20px;
+        padding:16px;
+        border:2px solid #222;
+        border-radius:10px;
+        background:white;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+    PROGRAM MEGNYITÁSA
+</button>
+    </div>
 
 <button
     id="toggleWeekButton"
@@ -858,15 +886,25 @@ if (savedState && savedState.closed) {
         ? "✓ Teljesítve"
         : "— Lezárva";
 }
-        if (
+        const openButton =
+    document.getElementById("openTodayProgramButton");
+
+todayProgramElement.style.cursor = "default";
+todayProgramElement.onclick = null;
+
+if (
     todayProgram.code !== "P" &&
     !(savedState && savedState.closed)
 ) {
-    todayProgramElement.style.cursor = "pointer";
+    openButton.style.display = "block";
 
-    todayProgramElement.onclick = function () {
+    openButton.onclick = function () {
         openProgram(todayProgram.code, todayIndex);
     };
+
+} else {
+    openButton.style.display = "none";
+    openButton.onclick = null;
 }
     }
 function toggleWeekView() {
