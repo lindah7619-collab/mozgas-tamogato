@@ -852,7 +852,13 @@ const savedState = weeklyDayStates[todayIndex];
         `${todayProgram.code} · ${todayProgram.name}`;
 
     todayDetail.textContent = todayProgram.detail;
-if (
+if (savedState && savedState.closed) {
+
+    todayDetail.textContent = savedState.completed
+        ? "✓ Teljesítve"
+        : "— Lezárva";
+}
+        if (
     todayProgram.code !== "P" &&
     !(savedState && savedState.closed)
 ) {
