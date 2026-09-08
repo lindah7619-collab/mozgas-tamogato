@@ -177,7 +177,26 @@ button.choice.selected {
     ">
     Heti terv
 </button>
+<button
+    id="toggleLastWeekButton"
+    onclick="toggleLastWeekView()"
+    style="
+        width:100%;
+        margin-bottom:20px;
+        padding:14px;
+        border:none;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+    Előző hét
+</button>
 
+<div id="lastWeekPanel" style="display:none;">
+    <h2>Előző hét</h2>
+    <div id="lastWeekSchedule"></div>
+</div>
 <div id="weekPanel" style="display:none;">
 
     <div style="display:none;">
@@ -273,7 +292,12 @@ const currentWeekId = getWeekId(today);
 const savedWeekId = localStorage.getItem("currentWeekId");
 const savedPlan = localStorage.getItem("weeklyPlan");
 const savedNextWeekPlan = localStorage.getItem("nextWeekPlan");
+const savedLastWeekSnapshot =
+    localStorage.getItem("lastWeekSnapshot");
 
+const lastWeekSnapshot = savedLastWeekSnapshot
+    ? JSON.parse(savedLastWeekSnapshot)
+    : null;
 let nextWeekPlan = savedNextWeekPlan
     ? JSON.parse(savedNextWeekPlan)
     : Array(7).fill(null);
@@ -844,6 +868,75 @@ function toggleWeekView() {
         button.textContent = "Heti terv";
     }
 } 
+    function toggleLastWeekView() {
+
+    const panel = document.getElementById("lastWeekPanel");
+    const button = document.getElementById("toggleLastWeekButton");
+
+    const isHidden = panel.style.display === "none";
+
+    if (isHidden) {
+        panel.style.display = "block";
+        button.textContent = "Előző hét elrejtése";
+        renderLastWeek();
+    } else {
+        panel.style.display = "none";
+        button.textContent = "Előző hét";
+    }
+}
+    function renderLastWeek() {
+
+    const container =
+        document.getElementById("lastWeekSchedule");
+
+    container.innerHTML = "";
+
+    if (!lastWeekSnapshot) {
+        container.innerHTML =
+            "<p>Még nincs előző heti adat.</p>";
+        return;
+    }
+
+    lastWeekSnapshot.plan.forEach((type, index) => {
+
+        const state =
+            lastWeekSnapshot.dayStates[index];
+
+        let statusMark = "";
+        let programText = type;
+
+        if (state && state.program) {
+            programText =
+                `${type} · ${state.program}`;
+        }
+
+        if (state && state.closed) {
+            statusMark = state.completed
+                ? "✓"
+                : "—";
+        }
+
+        const row =
+            document.createElement("div");
+
+        row.className = "result-day";
+
+        row.innerHTML = `
+            <div class="day-name">${days[index]}</div>
+            <div>
+                <div class="program-name">
+                    ${programText}
+                </div>
+                <div class="program-detail"
+                    style="font-weight:bold; margin-top:4px;">
+                    ${statusMark}
+                </div>
+            </div>
+        `;
+
+        container.appendChild(row);
+    });
+}
     function renderNextWeekPlanner() {
 
     const planner = document.getElementById("nextWeekPlanner");
