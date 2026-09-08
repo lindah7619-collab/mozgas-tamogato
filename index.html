@@ -189,12 +189,16 @@ button.choice.selected {
     PROGRAM MEGNYITÁSA
 </button>
     </div>
-
+<div style="
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+">
 <button
     id="toggleWeekButton"
     onclick="toggleWeekView()"
     style="
-        width:100%;
+       flex:1;
         margin-bottom:20px;
         padding:14px;
         border:none;
@@ -209,7 +213,7 @@ button.choice.selected {
     id="toggleLastWeekButton"
     onclick="toggleLastWeekView()"
     style="
-        width:100%;
+        flex:1;
         margin-bottom:20px;
         padding:14px;
         border:none;
@@ -220,7 +224,7 @@ button.choice.selected {
     ">
     Előző hét
 </button>
-
+</div>
 <div id="lastWeekPanel" style="display:none;">
     <h2>Előző hét</h2>
     <div id="lastWeekSchedule"></div>
