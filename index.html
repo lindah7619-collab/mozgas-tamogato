@@ -829,7 +829,7 @@ function getTodayProgram() {
     function renderTodayView() {
 
     const todayProgram = getTodayProgram();
-
+const savedState = weeklyDayStates[todayIndex];
     const todayDate = document.getElementById("todayDate");
     const todayProgramElement = document.getElementById("todayProgram");
     const todayDetail = document.getElementById("todayDetail");
@@ -852,7 +852,17 @@ function getTodayProgram() {
         `${todayProgram.code} · ${todayProgram.name}`;
 
     todayDetail.textContent = todayProgram.detail;
+if (
+    todayProgram.code !== "P" &&
+    !(savedState && savedState.closed)
+) {
+    todayProgramElement.style.cursor = "pointer";
+
+    todayProgramElement.onclick = function () {
+        openProgram(todayProgram.code, todayIndex);
+    };
 }
+    }
 function toggleWeekView() {
 
     const panel = document.getElementById("weekPanel");
