@@ -766,8 +766,8 @@ let statusMark = "";
 
 if (savedState && savedState.closed) {
     statusMark = savedState.completed
-        ? "✓ Teljesítve"
-        : "— Lezárva";
+        ? "✓ TELJESÍTVE"
+        : "— LEZÁRVA";
 }
 
 const row = document.createElement("div");
@@ -973,9 +973,9 @@ function toggleWeekView() {
         }
 
         if (state && state.closed) {
-            statusMark = state.completed
-                ? "✓"
-                : "—";
+    statusMark = state.completed
+    ? "✓ TELJESÍTVE"
+    : "— LEZÁRVA";
         }
 
         const row =
