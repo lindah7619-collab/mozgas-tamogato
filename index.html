@@ -976,15 +976,20 @@ const programNames = {
     P: "Pihenőnap"
 };
 
-        if (state && state.program) {
+       if (state && state.program) {
     const programName =
         programNames[state.program] || "";
 
     programText =
         `${type} · ${state.program} · ${programName}`;
-}
 
-if (type === "P") {
+} else if (type === "E") {
+    programText = "E · Edzés";
+
+} else if (type === "M") {
+    programText = "M · Mozgás";
+
+} else if (type === "P") {
     programText = "P · Pihenőnap";
 }
 
