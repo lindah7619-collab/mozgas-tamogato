@@ -967,10 +967,26 @@ function toggleWeekView() {
         let statusMark = "";
         let programText = type;
 
+const programNames = {
+    A: "Teljes test",
+    B: "Teljes test",
+    M1: "Futás–séta",
+    M2: "Mobilitás + jóga",
+    M3: "Elliptikus + mobilitás",
+    P: "Pihenőnap"
+};
+
         if (state && state.program) {
-            programText =
-                `${type} · ${state.program}`;
-        }
+    const programName =
+        programNames[state.program] || "";
+
+    programText =
+        `${type} · ${state.program} · ${programName}`;
+}
+
+if (type === "P") {
+    programText = "P · Pihenőnap";
+}
 
         if (state && state.closed) {
     statusMark = state.completed
