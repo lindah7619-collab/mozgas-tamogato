@@ -1223,71 +1223,106 @@ if (code === "M2") {
     programView.id = "programView";
 
     programView.innerHTML = `
-        <div style="
-            margin-top: 28px;
-            background: white;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-        ">
+     <div style="
+    margin-top:28px;
+    padding:24px 4px;
+    border-top:1px solid #999;
+    border-bottom:1px solid #999;
+">
 
-            <h2 style="margin-top: 0;">${title}</h2>
-            <p style="color:#666;">
-                ${duration}
-            </p>
+           <h2 style="
+    margin:0;
+    font-size:26px;
+    line-height:1.15;
+">
+    ${title}
+</h2>
+            <p style="
+    margin-top:8px;
+    margin-bottom:22px;
+    font-size:15px;
+">
+    ${duration}
+</p>
 
-            <h3>Bemelegítés</h3>
+            <h3 style="
+    margin-top:24px;
+    margin-bottom:10px;
+    padding-bottom:6px;
+    border-bottom:1px solid #bbb;
+">
+    Bemelegítés
+</h3>
 
             ${warmup}
 
-            <h3>Fő rész</h3>
+            <h3 style="
+    margin-top:24px;
+    margin-bottom:10px;
+    padding-bottom:6px;
+    border-bottom:1px solid #bbb;
+">
+    Fő rész
+</h3>
 
             ${mainPart}
 
-            <h3>Levezetés</h3>
+            <h3 style="
+    margin-top:24px;
+    margin-bottom:10px;
+    padding-bottom:6px;
+    border-bottom:1px solid #bbb;
+">
+    Levezetés
+</h3>
 
             ${cooldown}
-            <button
-                onclick="finishWorkout()"
-                style="
-                    width:100%;
-                    margin-top:20px;
-                    padding:14px;
-                    border:none;
-                    border-radius:10px;
-                    font-size:16px;
-                    font-weight:bold;
-                    cursor:pointer;
-                ">
-                Edzés befejezése
-            </button>
+           <button
+    onclick="finishWorkout()"
+    style="
+        width:100%;
+        margin-top:24px;
+        padding:16px;
+        border:2px solid #222;
+        border-radius:10px;
+        background:#222;
+        color:white;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    ">
+    EDZÉS BEFEJEZÉSE
+</button>
 <button
     onclick="closeWithoutCompletion()"
     style="
         width:100%;
         margin-top:10px;
         padding:14px;
-        border:none;
+        border:1px solid #777;
         border-radius:10px;
-        font-size:16px;
+        background:white;
+        color:#222;
+        font-size:15px;
         font-weight:bold;
         cursor:pointer;
-        background:#eeeeee;
     ">
     Nap lezárása teljesítés nélkül
 </button>
             <div
-                id="finishMessage"
-                style="
-                    display:none;
-                    margin-top:16px;
-                    padding:14px;
-                    border-radius:10px;
-                    background:#e3f3e3;
-                    font-weight:bold;
-                ">
-                ✓ Mai program teljesítve. Ráadás nem szükséges.
-            </div>
+    id="finishMessage"
+    style="
+        display:none;
+        margin-top:18px;
+        padding:16px 4px;
+        border-top:1px solid #999;
+        border-bottom:1px solid #999;
+        font-size:16px;
+        font-weight:bold;
+        line-height:1.4;
+    ">
+    ✓ Mai program teljesítve. Ráadás nem szükséges.
+</div>
 
         </div>
     `;
