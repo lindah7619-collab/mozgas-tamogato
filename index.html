@@ -1337,7 +1337,7 @@ if (code === "M2") {
 
 function finishWorkout() {
 
-    const programTitle = document.querySelector("#programView h2").textContent;
+    const programTitle = document.querySelector("#programView h2").textContent.trim();
 if (
     currentDayIndex !== null &&
     weeklyDayStates[currentDayIndex] &&
@@ -1394,8 +1394,8 @@ if (programTitle.startsWith("M3")) {
 }  
     function closeWithoutCompletion() {
 
-    const programTitle =
-        document.querySelector("#programView h2").textContent;
+        const programTitle =
+    document.querySelector("#programView h2").textContent.trim();
 if (
     currentDayIndex !== null &&
     weeklyDayStates[currentDayIndex] &&
